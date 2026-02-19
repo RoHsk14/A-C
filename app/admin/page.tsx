@@ -9,9 +9,10 @@ import Link from 'next/link'
 export default async function AdminOverviewPage({
     searchParams,
 }: {
-    searchParams: { period?: '7d' | '30d' | 'all' }
+    searchParams: Promise<{ period?: '7d' | '30d' | 'all' }>
 }) {
-    const period = searchParams.period || '30d'
+    const { period: periodParam } = await searchParams
+    const period = periodParam || '30d'
 
     // Fetch data in parallel
     const [stats, analyticsData] = await Promise.all([

@@ -2,14 +2,15 @@ import { createClient } from '@/lib/supabase/server'
 import { BrandingForm } from '@/components/creator/branding-form'
 import { notFound } from 'next/navigation'
 
-export default async function CommunityBrandingPage({ params }: { params: { slug: string } }) {
+export default async function CommunityBrandingPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params
     const supabase = await createClient()
 
     // Fetch community by slug
     const { data: community } = await supabase
         .from('communities')
         .select('id, name, logo_url, primary_color, favicon_url')
-        .eq('slug', params.slug)
+        .eq('slug', slug)
         .single()
 
     if (!community) {

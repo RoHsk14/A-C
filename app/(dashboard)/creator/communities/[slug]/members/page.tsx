@@ -11,9 +11,10 @@ import { InviteMemberModal } from '@/components/invite-member-modal'
 
 
 
-export default async function CommunityMembersPage({ params }: { params: { slug: string } }) {
+export default async function CommunityMembersPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params
     const supabase = await createClient()
-    const { slug } = params
+
 
     // 1. Verify Access & Fetch Community
     const { data: { user } } = await supabase.auth.getUser()

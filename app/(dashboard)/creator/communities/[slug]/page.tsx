@@ -6,9 +6,10 @@ import { PlusCircle, Hash, Globe, Lock, ChevronLeft, Settings } from 'lucide-rea
 import { Badge } from '@/components/ui/badge'
 import { notFound } from 'next/navigation'
 
-export default async function CommunityDetailsPage({ params }: { params: { slug: string } }) {
-    const supabase = await createClient()
+export default async function CommunityDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params
+    const supabase = await createClient()
+
 
     // Fetch community and its spaces in one query
     const { data: community } = await supabase

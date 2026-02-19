@@ -9,10 +9,10 @@ import { fr } from 'date-fns/locale'
 export default async function AdminLogsPage({
     searchParams,
 }: {
-    searchParams: { page?: string; action?: string }
+    searchParams: Promise<{ page?: string; action?: string }>
 }) {
-    const page = parseInt(searchParams.page || '1')
-    const actionFilter = searchParams.action
+    const { page: pageParam, action: actionFilter } = await searchParams
+    const page = parseInt(pageParam || '1')
 
     const { logs, total, pages } = await getAuditLogs(page, 50, actionFilter)
 

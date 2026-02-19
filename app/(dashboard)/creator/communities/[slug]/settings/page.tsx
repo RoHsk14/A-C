@@ -12,13 +12,14 @@ import { BrandingForm } from '@/components/creator/branding-form'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
-export default async function CommunitySettingsPage({ params }: { params: { slug: string } }) {
+export default async function CommunitySettingsPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) redirect('/login')
 
-    const { slug } = await params
+
 
     // 1. Fetch Community & Verify Access
     const { data: community } = await supabase

@@ -6,13 +6,14 @@ import Link from 'next/link'
 import { ChevronLeft } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
-export default async function SpaceSettingsPage({ params }: { params: { slug: string, spaceSlug: string } }) {
+export default async function SpaceSettingsPage({ params }: { params: Promise<{ slug: string, spaceSlug: string }> }) {
+    const { slug, spaceSlug } = await params
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) redirect('/login')
 
-    const { slug, spaceSlug } = params
+
 
     // 1. Fetch Community & Space & Verify Access
     const { data: community } = await supabase

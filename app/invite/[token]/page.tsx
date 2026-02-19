@@ -6,8 +6,9 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { AcceptInviteButton } from '@/components/accept-invite-button'
 
-export default async function InvitePage({ params }: { params: { token: string } }) {
-    const token = params.token
+export default async function InvitePage({ params }: { params: Promise<{ token: string }> }) {
+    const { token } = await params
+
     const supabase = await createClient()
 
     // 1. Check User Auth

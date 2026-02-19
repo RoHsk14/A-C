@@ -9,9 +9,10 @@ import { EnrollmentActions } from '@/components/admin/enrollment-actions'
 import { Search, UserPlus, Mail, Calendar } from 'lucide-react'
 import Link from 'next/link'
 
-export default async function CourseMembersPage({ params }: { params: { courseId: string } }) {
+export default async function CourseMembersPage({ params }: { params: Promise<{ courseId: string }> }) {
+    const { courseId } = await params
     const supabase = await createClient()
-    const { courseId } = params
+
 
     // 1. Verify Access & Fetch Course
     const { data: { user } } = await supabase.auth.getUser()

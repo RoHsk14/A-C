@@ -5,9 +5,10 @@ import { ChevronLeft } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 
-export default async function CreateCommunitySpacePage({ params }: { params: { slug: string } }) {
+export default async function CreateCommunitySpacePage({ params }: { params: Promise<{ slug: string }> }) {
     const supabase = await createClient()
-    const { slug } = params
+    const { slug } = await params
+
 
     // Fetch community to get ID
     const { data: community } = await supabase

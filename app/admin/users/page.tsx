@@ -6,11 +6,10 @@ import { Card } from '@/components/ui/card'
 export default async function AdminUsersPage({
     searchParams,
 }: {
-    searchParams: { page?: string; search?: string; role?: string }
+    searchParams: Promise<{ page?: string; search?: string; role?: string }>
 }) {
-    const page = parseInt(searchParams.page || '1')
-    const search = searchParams.search
-    const roleFilter = searchParams.role
+    const { page: pageParam, search, role: roleFilter } = await searchParams
+    const page = parseInt(pageParam || '1')
 
     const { users, total, pages } = await getUsers(page, 20, search, roleFilter)
 

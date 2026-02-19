@@ -47,7 +47,7 @@ export function SpaceSettingsForm({ space, communitySlug }: SpaceSettingsFormPro
         formData.set('is_private_value', String(isPrivate))
 
         try {
-            await updateSpace(space.id, space.community_id, formData)
+            await updateSpace(space.id, formData)
             toast.success("Espace mis à jour !")
             router.refresh()
         } catch (error: any) {
@@ -61,7 +61,7 @@ export function SpaceSettingsForm({ space, communitySlug }: SpaceSettingsFormPro
     const handleDelete = async () => {
         setDeleteLoading(true)
         try {
-            await deleteSpace(space.id, space.community_id)
+            await deleteSpace(space.id)
             toast.success("Espace supprimé.")
             router.push(`/creator/communities/${communitySlug}`)
         } catch (error: any) {

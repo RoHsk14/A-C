@@ -54,7 +54,7 @@ export function CommunityMembersList({ communityId, members, currentUserId }: Co
     const handleRoleChange = async (userId: string, newRole: string) => {
         setLoadingId(userId)
         try {
-            await updateMemberRole(communityId, userId, newRole)
+            await updateMemberRole(communityId, userId, newRole as 'admin' | 'member' | 'moderator')
             toast.success(`Rôle mis à jour : ${newRole}`)
             router.refresh()
         } catch (error: any) {

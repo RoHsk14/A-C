@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 
-export default function InvitationsRedirectPage({ params }: { params: { slug: string } }) {
-    redirect(`/creator/communities/${params.slug}/settings?tab=invitations`)
+export default async function InvitationsRedirectPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params
+    redirect(`/creator/communities/${slug}/settings?tab=invitations`)
 }
