@@ -26,6 +26,7 @@ export function SocialButtons() {
                         access_type: 'offline',
                         prompt: 'consent',
                     },
+                    skipBrowserRedirect: false,
                 },
             })
 
