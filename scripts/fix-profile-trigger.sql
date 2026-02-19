@@ -15,8 +15,8 @@ BEGIN
   -- Récupération sécurisée du nom
   -- Priorité : raw_user_meta_data->name, puis full_name, puis email, puis "Utilisateur"
   full_name := COALESCE(
-    NEW.raw_user_meta_data->>'name',
     NEW.raw_user_meta_data->>'full_name',
+    NEW.raw_user_meta_data->>'name',
     NEW.email,
     'Utilisateur'
   );
