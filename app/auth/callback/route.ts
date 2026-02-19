@@ -18,8 +18,8 @@ export async function GET(request: Request) {
                 const { error } = await supabase.auth.exchangeCodeForSession(code)
 
                 if (error) {
-                    console.error("Exchange code error:", error)
-                    return NextResponse.redirect(`${baseUrl}/login?error=exchange_code_failed`)
+                    console.error("AUTH_CALLBACK_ERROR: Exchange code failed:", error)
+                    return NextResponse.redirect(`${baseUrl}/login?error=auth_callback_failed&details=exchange_code_failed`)
                 }
 
                 console.log("Session exchanged successfully")
@@ -28,8 +28,8 @@ export async function GET(request: Request) {
                 const { data: { user }, error: userError } = await supabase.auth.getUser()
 
                 if (userError || !user) {
-                    console.error("Get user error:", userError)
-                    return NextResponse.redirect(`${baseUrl}/login?error=get_user_failed`)
+                    console.error("AUTH_CALLBACK_ERROR: Get user failed:", userError)
+                    return NextResponse.redirect(`${baseUrl}/login?error=auth_callback_failed&details=get_user_failed`)
                 }
 
                 console.log("User found:", user.id)
@@ -65,13 +65,13 @@ export async function GET(request: Request) {
                 return NextResponse.redirect(`${baseUrl}${next}`)
 
             } catch (err) {
-                console.error("Callback unexpected error:", err)
-                return NextResponse.redirect(`${baseUrl}/login?error=server_error`)
+                console.error("AUTH_CALLBACK_ERROR: Unexpected error in processing block:", err)
+                return NextResponse.redirect(`${baseUrl}/login?error=auth_callback_failed&details=processing_error`)
             }
         }
     } catch (criticalErr: any) {
-        console.error("CRITICAL INIT ERROR:", criticalErr)
-        return NextResponse.redirect(`${baseUrl}/login?error=init_error&details=${encodeURIComponent(criticalErr.message || 'Unknown')}`)
+        console.error("AUTH_CALLBACK_CRITICAL: Critical initialization error:", criticalErr)
+        return NextResponse.redirect(`${baseUrl}/login?error=auth_callback_failed&details=${encodeURIComponent(criticalErr.message || 'critical_init_error')}`)
     }
 
     // return the user to an error page with instructions
