@@ -13,10 +13,14 @@ export function SocialButtons() {
     const handleSocialLogin = async (provider: 'google' | 'apple' | 'facebook') => {
         try {
             setIsLoading(provider)
+            const redirectTo = `${window.location.origin}/auth/callback`
+            console.log("Redirecting to:", redirectTo)
+
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: provider,
                 options: {
-                    redirectTo: `${window.location.origin}/auth/callback`,
+                    redirectTo,
+                    scopes: 'email',
                     queryParams: {
                         access_type: 'offline',
                         prompt: 'consent',

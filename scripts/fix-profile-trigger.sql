@@ -6,6 +6,14 @@
 -- (ex: nom, avatar) lors de l'inscription OAuth/Email.
 -- =====================================================
 
+-- Add email column if not exists
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'profiles' AND column_name = 'email') THEN
+        ALTER TABLE public.profiles ADD COLUMN email TEXT;
+    END IF;
+END $$;
+
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -30,11 +38,13 @@ BEGIN
   );
 
   -- Insertion dans la table profiles avec gestion des conflits (si le profil existe déjà)
-  INSERT INTO public.profiles (id, name, avatar_url)
+  -- Force la récupération de l'email
+  INSERT INTO public.profiles (id, name, avatar_url, email)
   VALUES (
     NEW.id,
     full_name,
-    avatar
+    avatar,
+    COALESCE(NEW.email, NEW.raw_user_meta_data->>'email')
   )
   ON CONFLICT (id) DO UPDATE SET
     name = EXCLUDED.name,
