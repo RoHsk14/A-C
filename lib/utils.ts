@@ -10,7 +10,9 @@ export function getBaseUrl() {
     return window.location.origin
   }
   if (process.env.NEXT_PUBLIC_SITE_URL) {
-    return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, '')
+    const url = process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, '')
+    console.log("Base URL détectée :", url)
+    return url
   }
   return 'http://localhost:3000'
 }

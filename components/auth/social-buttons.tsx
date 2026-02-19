@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client"
 import { useState } from "react"
 import { toast } from "sonner"
+import { getBaseUrl } from "@/lib/utils"
 
 export function SocialButtons() {
     const [isLoading, setIsLoading] = useState<string | null>(null)
@@ -13,7 +14,7 @@ export function SocialButtons() {
     const handleSocialLogin = async (provider: 'google' | 'apple' | 'facebook') => {
         try {
             setIsLoading(provider)
-            const redirectTo = `${window.location.origin}/auth/callback`
+            const redirectTo = `${getBaseUrl()}/auth/callback`
             console.log("Redirecting to:", redirectTo)
 
             const { error } = await supabase.auth.signInWithOAuth({
