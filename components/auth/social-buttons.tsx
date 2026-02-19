@@ -9,13 +9,15 @@ export function SocialButtons() {
     const [isLoading, setIsLoading] = useState<string | null>(null)
     const supabase = createClient()
 
+    import { getBaseUrl } from "@/lib/utils"
+
     const handleSocialLogin = async (provider: 'google' | 'apple' | 'facebook') => {
         try {
             setIsLoading(provider)
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: provider,
                 options: {
-                    redirectTo: `${window.location.origin}/auth/callback`,
+                    redirectTo: `${getBaseUrl()}/auth/callback`,
                     queryParams: {
                         access_type: 'offline',
                         prompt: 'consent',
@@ -24,9 +26,9 @@ export function SocialButtons() {
             })
 
             if (error) throw error
-        } catch (error) {
-            console.error(error)
-            toast.error("Erreur lors de la connexion avec " + provider)
+        } catch (error: any) {
+            console.error("Auth error:", error)
+            toast.error(error.message || "Erreur lors de la connexion avec " + provider)
             setIsLoading(null)
         }
     }
