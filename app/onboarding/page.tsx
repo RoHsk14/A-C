@@ -1,14 +1,14 @@
 'use client'
 
 import { useSearchParams, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 
-export default function OnboardingPage() {
+function OnboardingContent() {
     const searchParams = useSearchParams()
     const missingEmail = searchParams.get('missing_email')
     const router = useRouter()
@@ -41,10 +41,6 @@ export default function OnboardingPage() {
     }
 
     if (!missingEmail) {
-        // Normal onboarding logic (e.g. welcome, etc.)
-        // For now, redirect to dashboard if no specific issue
-        // router.push('/dashboard') 
-        // But maybe show a "Welcome" message?
         return (
             <div className="flex flex-col items-center justify-center min-h-screen p-4">
                 <h1 className="text-2xl font-bold mb-4">Bienvenue sur Afro-Circle !</h1>
@@ -79,5 +75,17 @@ export default function OnboardingPage() {
                 </form>
             </div>
         </div>
+    )
+}
+
+export default function OnboardingPage() {
+    return (
+        <Suspense fallback={
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
+            </div>
+        }>
+            <OnboardingContent />
+        </Suspense>
     )
 }
